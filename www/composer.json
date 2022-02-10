@@ -1,0 +1,10 @@
+{
+  "require": {
+    "php": ">=7.2",
+    "league/flysystem-ftp": "2.0",
+    "rosell-dk/webp-convert": "^2.8",
+    "jenssegers/agent": "^2.6",
+    "guzzlehttp/guzzle": "^7.4",
+    "fakerphp/faker": "^1.16"
+  }
+}
