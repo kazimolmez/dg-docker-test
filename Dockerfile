@@ -1,7 +1,7 @@
 FROM php:7.2-apache
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 # Copy composer.json
 COPY /www/composer.json .
