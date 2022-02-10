@@ -8,25 +8,45 @@ COPY /www/composer.json .
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
     git \
-    curl
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
+    zip \
+    mcrypt \
+    unzip
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
-RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
-RUN docker-php-ext-install gd
+# Install PHP extensions
+#zip
+RUN docker-php-ext-install zip \
+    && docker-php-ext-enable zip
+
+# mcrypt
+RUN apt-get update && apt-get install -y libmcrypt-dev \
+    && pecl install mcrypt-1.0.4 \
+    && docker-php-ext-enable mcrypt
+
+#other
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd bcmath
+RUN docker-php-ext-enable pdo_mysql
+RUN docker-php-ext-enable mbstring
+RUN docker-php-ext-enable exif
+RUN docker-php-ext-enable pcntl
+RUN docker-php-ext-enable bcmath
+RUN docker-php-ext-enable gd
+RUN docker-php-ext-enable bcmath
+RUN a2enmod rewrite
+
+#imagick
+RUN apt-get update && apt-get install -y \
+    libmagickwand-dev --no-install-recommends \
+    && pecl install imagick \
+	&& docker-php-ext-enable imagick
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
