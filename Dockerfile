@@ -4,7 +4,7 @@ FROM php:7.2-apache
 WORKDIR /var/www
 
 # Copy composer.json
-COPY composer.json .
+COPY /www/composer.json .
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
